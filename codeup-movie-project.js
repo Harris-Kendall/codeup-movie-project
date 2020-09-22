@@ -25,8 +25,25 @@ TODO
     - Allow users to search through the movies by rating, title, or genre (if you have it).
     - Use a free movie API like OMDB to include extra info or render movie posters.
  */
-const ourURL = 'https://enshrined-icy-harpymimus.glitch.me/movies'
 
-const getMovies = () => fetch(ourURL)
-    .then(res => res.json())
-    .catch(console.error);
+{
+    /* Page Load: */
+    const ourURL = 'https://enshrined-icy-harpymimus.glitch.me/movies'
+    //Wait for window load
+    // $(window).onload(function() {
+    //     // Animate loader off screen
+    //     $(".se-pre-con").fadeOut("slow");
+    // });
+
+    const getMovies = () => fetch(ourURL)
+        .then(res => res.json())
+        .then(movies => {
+            for (let movie of movies) {
+                $('#movies').append(`<h3>${movie.title}</h3><p>No. of Stars: ${movie.rating}</p>`)
+            }
+        })
+        .catch(console.error);
+    console.log(getMovies());
+
+
+}

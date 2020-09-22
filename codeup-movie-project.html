@@ -4,13 +4,44 @@
     <meta charset="UTF-8">
     <title>Harris-Kendall Movie Project</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <link rel="stylesheet" href="codeup-movie-project.css">
 </head>
 <body>
-<div class="d-flex align-items-center">
-    <strong>Loading...</strong>
-    <div class="spinner-border ml-auto" role="status" aria-hidden="true"></div>
-</div>
+<main class="container">
+<!--    <div class="se-pre-con"></div>-->
 
+    <div id="movies"></div>
+    <button id="edit-movie" class="btn btn-primary">Edit Movie</button>
+    <form>
+        <div class="form-group">
+            <label for="movie-title">Movie Title</label>
+            <input type="text" class="form-control" id="movie-title" placeholder="enter movie title">
+        </div>
+        <div class="form-group">
+            <label for="movie-ratings">Rate this movie:</label>
+            <select class="form-control" id="movie-ratings">
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+                <option>5</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="movie-genre">Genre:</label>
+            <select class="form-control" id="movie-genre">
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+                <option>5</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+
+
+</main>
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
