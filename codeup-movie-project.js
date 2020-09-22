@@ -29,12 +29,6 @@ TODO
 {
     /* Page Load: */
     const ourURL = 'https://enshrined-icy-harpymimus.glitch.me/movies'
-    //Wait for window load
-    // $(window).onload(function() {
-    //     // Animate loader off screen
-    //     $(".se-pre-con").fadeOut("slow");
-    // });
-
     const getMovies = () => fetch(ourURL)
         .then(res => res.json())
         .then(movies => {
@@ -43,7 +37,12 @@ TODO
             }
         })
         .catch(console.error);
-    console.log(getMovies());
 
+    //Wait for window load
+    $(window).on('load', function() {
+        //Animate loader off screen
+        $(".se-pre-con").fadeOut("slow");
+        getMovies();
+    });
 
 }
