@@ -25,20 +25,27 @@ TODO
     - Allow users to search through the movies by rating, title, or genre (if you have it).
     - Use a free movie API like OMDB to include extra info or render movie posters.
  */
-
+http://img.omdbapi.com/?apikey=30f046b7&t=Highlander
 {
     /* Page Load: */
+    const OMDb_API_Key = '30f046b7'
     const ourURL = 'https://enshrined-icy-harpymimus.glitch.me/movies'
     const getMovies = () => fetch(ourURL)
         .then(res => res.json())
         .then(movies => {
             for (let movie of movies) {
+                const imgSource = `https://api.themoviedb.org/3/search/movie?api_key=15d2ea6d0dc1d476efbca3eba2b9bbfb&query=${film}&callback=?`
                 $('#nav-home').append(`
-                    <h3>${movie.title}</h3>
-                    <div class="stars-outer">
-                      <div class="stars-inner"></div>
+                    <div class="card" style="width: 18rem;">
+                      <img id="poster" src="${imgSource}" class="card-img-top" alt="movie poster">
+                      <div class="card-body">
+                        <h3>${movie.title}</h3>
+                        <div class="stars-outer">
+                            <div class="stars-inner"></div>
+                        </div>
+                      </div>
                     </div>
-                    <button id="edit-movie" class="btn btn-sm btn-primary">Edit Movie</button>
+<!--                    <button id="edit-movie" class="btn btn-sm btn-primary">Edit Movie</button>-->
                 `)
             }
         })
@@ -52,3 +59,46 @@ TODO
     });
 
 }
+$('#term').focus(function(){
+    var full = $("#poster").has("img").length ? true : false;
+    if(full == false){
+        $('#poster').empty();
+    }
+});
+
+var getPoster = function(){
+
+    var film = $('#term').val();
+
+    if(film == ''){
+
+        $('#poster').html('<div class="alert"><strong>Oops!</strong> Try adding something into the search field.</div>');
+
+    } else {
+
+        $('#poster').html('<div class="alert"><strong>Loading...</strong></div>');
+
+        $.getJSON("https://api.themoviedb.org/3/search/movie?api_key=15d2ea6d0dc1d476efbca3eba2b9bbfb&query=" + film + "&callback=?", function(json) {
+            if (json != "Nothing found."){
+                console.log(json);
+                $('#poster').html('<p>Your search found: <strong>' + json.results[0].title + '</strong></p><img src=\"http://image.tmdb.org/t/p/w500/' + json.results[0].poster_path + '\" class=\"img-responsive\" >');
+            } else {
+                $.getJSON("https://api.themoviedb.org/3/search/movie?api_key=15d2ea6d0dc1d476efbca3eba2b9bbfb&query=goonies&callback=?", function(json) {
+
+                    console.log(json);
+                    $('#poster').html('<div class="alert"><p>We\'re afraid nothing was found for that search.</p></div><p>Perhaps you were looking for The Goonies?</p><img id="thePoster" src="http://image.tmdb.org/t/p/w500/' + json[0].poster_path + ' class="img-responsive" />');
+                });
+            }
+        });
+
+    }
+
+    return false;
+}
+
+$('#search').click(getPoster);
+$('#term').keyup(function(event){
+    if(event.keyCode == 13){
+        getPoster();
+    }
+});

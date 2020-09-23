@@ -12,3 +12,11 @@ if it's not present, don't show loader */
     z-index: 9999;
     background: url(https://smallenvelop.com/wp-content/uploads/2014/08/Preloader_11.gif) center no-repeat #fff;
 }
+body {
+    background-image: url("img/alessia-chinazzo-cGNVTBcP7vY-unsplash.jpg");
+    background-position: bottom;
+    background-size: cover;
+}
+#nav-tabContent {
+    background-color: #00000091;
+}
