@@ -33,7 +33,13 @@ TODO
         .then(res => res.json())
         .then(movies => {
             for (let movie of movies) {
-                $('#movies').append(`<h3>${movie.title}</h3><p>No. of Stars: ${movie.rating}</p>`)
+                $('#nav-home').append(`
+                    <h3>${movie.title}</h3>
+                    <div class="stars-outer">
+                      <div class="stars-inner"></div>
+                    </div>
+                    <button id="edit-movie" class="btn btn-sm btn-primary">Edit Movie</button>
+                `)
             }
         })
         .catch(console.error);
