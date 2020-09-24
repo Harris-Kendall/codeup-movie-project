@@ -25,16 +25,16 @@ TODO
     - Allow users to search through the movies by rating, title, or genre (if you have it).
     - Use a free movie API like OMDB to include extra info or render movie posters.
  */
-http://img.omdbapi.com/?apikey=30f046b7&t=Highlander
+//http://img.omdbapi.com/?apikey=30f046b7&t=Highlander
 {
     /* Page Load: */
-    const OMDb_API_Key = '30f046b7'
+    //const OMDb_API_Key = '30f046b7'
     const ourURL = 'https://enshrined-icy-harpymimus.glitch.me/movies'
     const getMovies = () => fetch(ourURL)
         .then(res => res.json())
         .then(movies => {
             for (let movie of movies) {
-                const imgSource = `https://api.themoviedb.org/3/search/movie?api_key=15d2ea6d0dc1d476efbca3eba2b9bbfb&query=${film}&callback=?`
+                const imgSource = `https://api.themoviedb.org/3/search/movie?api_key=15d2ea6d0dc1d476efbca3eba2b9bbfb&query=${movie.title}&callback=?`
                 $('#nav-home').append(`
                     <div class="card" style="width: 18rem;">
                       <img id="poster" src="${imgSource}" class="card-img-top" alt="movie poster">
