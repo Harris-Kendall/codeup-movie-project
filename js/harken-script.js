@@ -53,15 +53,20 @@ $(document).ready(() => {
         harkenMovies();
     //Delete Movies button
 
-    // $('.deletion').on("click", () =>
-    //     fetch(`${harkenDatabase}/${movie.id}`, {
-    //         method: 'DELETE',
-    //         headers: {'Content-Type':'application/json'}
-    //     }).then(res => res.json())
-    //         .then(() =>
-    //             console.log(`Success: deleted movie with id of ${movie.id}`))
-    //         .catch(console.error);
-    // });
+    const ditchMovie = (thisMovie) =>
+        fetch(`${harkenDatabase}/${movie.id}`, {
+            method: 'DELETE',
+            headers: {'Content-Type': 'application/json'}
+        }).then(res => res.json())
+            .then(() =>
+                console.log(`Success: deleted movie with id of ${movie.id}`))
+            .catch(console.error);
+
+    $().click(ditchMovie())
+        .then( () => {
+            return fetch(harkenDatabase)
+                .then(response => response.json())
+                .then(console.log);
 
     //Edit Movie button
 
@@ -107,10 +112,12 @@ $(document).ready(() => {
                         $('#poster').html('<div class="alert"><p>We\'re afraid nothing was found for that search.</p></div><p>Perhaps you were looking for The Goonies?</p><img id="thePoster" src="http://image.tmdb.org/t/p/' + json[0].poster_path + ' class="img-responsive" />');
                     });
                 }
+
                 let newMovie = {
                     title: json.results[0].title,
                     rating: document.getElementById('rate').value
                 }
+
                 function addMovie (newMovie) {
                     return fetch(harkenDatabase, {
                         method: "POST",
@@ -121,7 +128,14 @@ $(document).ready(() => {
                         .then(data => console.log('success'))
                         .catch(console.error);
                 }
-                console.log(addMovie(newMovie));
+
+                addMovie(newMovie).then( () => {
+                    return fetch(harkenDatabase)
+                        .then(response => response.json())
+                        .then(console.log);
+                    }
+
+                )
             });
 
         }
