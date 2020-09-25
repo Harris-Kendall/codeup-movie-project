@@ -3,7 +3,7 @@
     const THEMOVIEDB_API_TOKEN = "67b9c6b38ecdf29bee715b3e3eef0d84"
 
     const harkenDatabase = "https://enshrined-icy-harpymimus.glitch.me/movies"
-$(document).ready(() => {
+    $(document).ready(() => {
 
         function getPoster(title) {
             return fetch(`https://api.themoviedb.org/3/search/movie?api_key=${THEMOVIEDB_API_TOKEN}&query=${title}`)
@@ -16,7 +16,7 @@ $(document).ready(() => {
                 .catch(error => console.error(error))
         }
 
-    let harkenMovies = () => {
+        function harkenMovies() {
             fetch(harkenDatabase)
                 .then(response => response.json())
                 .then(movies => {
@@ -40,9 +40,9 @@ $(document).ready(() => {
                         promises.push(getPoster(title))
                     }
                     Promise.all(promises)
-                        .then(function(movieUrls){
+                        .then(function (movieUrls) {
                             let images = $('img');
-                            for(let i = 0; i<movieUrls.length; i++){
+                            for (let i = 0; i < movieUrls.length; i++) {
                                 images[i].src = movieUrls[i];
                             }
                         })
@@ -51,107 +51,103 @@ $(document).ready(() => {
         }
 
         harkenMovies();
-    //Delete Movies button
+        //Delete Movies button
 
-    const ditchMovie = (thisMovie) =>
-        fetch(`${harkenDatabase}/${movie.id}`, {
-            method: 'DELETE',
-            headers: {'Content-Type': 'application/json'}
-        }).then(res => res.json())
-            .then(() =>
-                console.log(`Success: deleted movie with id of ${movie.id}`))
-            .catch(console.error);
+        // const ditchMovie = (thisMovie) =>
+        //     fetch(`${harkenDatabase}/${movie.id}`, {
+        //         method: 'DELETE',
+        //         headers: {'Content-Type': 'application/json'}
+        //     }).then(res => res.json())
+        //         .then(() =>
+        //             console.log(`Success: deleted movie with id of ${movie.id}`))
+        //         .catch(console.error);
+        //
+        // $().click(ditchMovie())
+        //     .then(() => {
+        //         return fetch(harkenDatabase)
+        //             .then(response => response.json())
+        //             .then(console.log);
 
-    $().click(ditchMovie())
-        .then( () => {
-            return fetch(harkenDatabase)
-                .then(response => response.json())
-                .then(console.log);
+                //Edit Movie button
 
-    //Edit Movie button
-
-    // Add Movie
-
-
-    //Window load spinner...
-    $(window).on('load', function() {
-        //Animate loader off screen
-        $(".se-pre-con").fadeOut("slow");
-    });
-});
-
-
-    //Movie search tab
-    $('#term').focus(function(){
-        var full = $("#poster").has("img").length ? true : false;
-        if(full == false){
-            $('#poster').empty();
-        }
-    });
-
-    var getPoster = function(){
-
-        var film = $('#term').val();
-
-        if(film == ''){
-
-            $('#poster').html('<div class="alert"><strong>Oops!</strong> Try adding something into the search field.</div>');
-
-        } else {
-
-            $('#poster').html('<div class="alert"><strong>Loading...</strong></div>');
-
-            $.getJSON("https://api.themoviedb.org/3/search/movie?api_key=15d2ea6d0dc1d476efbca3eba2b9bbfb&query=" + film + "&callback=?", function(json) {
-                if (json != "Nothing found."){
-                    console.log(json);
-                    $('#poster').html('<div class="card-body"><p class="text-white">You have added: <strong>' + json.results[0].title + '</strong></p></div><div class="card" style="width: 18rem;"><img class="card-img-top" src=\"http://image.tmdb.org/t/p/w500/' + json.results[0].poster_path + '\" class=\"img-responsive\" ></div>');
-                } else {
-                    $.getJSON("https://api.themoviedb.org/3/search/movie?api_key=15d2ea6d0dc1d476efbca3eba2b9bbfb&query=goonies&callback=?", function(json) {
-
+                // Add Movie
+        let getSearchPoster = function () {
+            let film = $('#term').val();
+            if (film === '') {
+                $('#poster').html('<div class="alert"><strong>Oops!</strong> Try adding something into the search field.</div>');
+            } else {
+                $('#poster').html('<div class="alert"><strong>Loading...</strong></div>');
+                $.getJSON("https://api.themoviedb.org/3/search/movie?api_key=15d2ea6d0dc1d476efbca3eba2b9bbfb&query=" + film + "&callback=?", function (json) {
+                    if (json !== "Nothing found.") {
                         console.log(json);
-                        $('#poster').html('<div class="alert"><p>We\'re afraid nothing was found for that search.</p></div><p>Perhaps you were looking for The Goonies?</p><img id="thePoster" src="http://image.tmdb.org/t/p/' + json[0].poster_path + ' class="img-responsive" />');
-                    });
-                }
-
-                let newMovie = {
-                    title: json.results[0].title,
-                    rating: document.getElementById('rate').value
-                }
-
-                function addMovie (newMovie) {
-                    return fetch(harkenDatabase, {
-                        method: "POST",
-                        headers: {"Content-Type":"application/json"},
-                        body: JSON.stringify(newMovie)
-                    })
-                        .then(response => response.json())
-                        .then(data => console.log('success'))
-                        .catch(console.error);
-                }
-
-                addMovie(newMovie).then( () => {
-                    return fetch(harkenDatabase)
-                        .then(response => response.json())
-                        .then(console.log);
+                        $('#poster').html('<div class="card-body"><p class="text-white">You have added: <strong>' + json.results[0].title + '</strong></p></div><div class="card" style="width: 18rem;"><img class="card-img-top" src=\"http://image.tmdb.org/t/p/w500/' + json.results[0].poster_path + '\" class=\"img-responsive\" alt="movie poster"></div>');
+                    } else {
+                        $.getJSON("https://api.themoviedb.org/3/search/movie?api_key=15d2ea6d0dc1d476efbca3eba2b9bbfb&query=goonies&callback=?", function (json) {
+                            console.log(json);
+                            $('#poster').html('<div class="alert"><p>We\'re afraid nothing was found for that search.</p></div><p>Perhaps you were looking for The Goonies?</p><img alt="movie poster" id="thePoster" src=\"http://image.tmdb.org/t/p/' + json.results[0].poster_path + '\" class="img-responsive">');
+                        });
                     }
 
-                )
+                    let newMovie = {
+                        title: json.results[0].title,
+                        rating: document.getElementById('rate').value
+                    }
+
+                    function addMovie(newMovie) {
+                        return fetch(harkenDatabase, {
+                            method: "POST",
+                            headers: {"Content-Type": "application/json"},
+                            body: JSON.stringify(newMovie)
+                        })
+                            .then(response => response.json())
+                            .then(data => {
+                                console.log("Success!")
+                                return data;
+                            })
+                            .then(harkenMovies)
+                            .catch(console.error);
+                    }
+
+                    addMovie(newMovie).then(() => {
+                            return fetch(harkenDatabase)
+                                .then(response => response.json())
+                                .then(console.log)
+                                .catch(console.error);
+
+                    })
+                });
+            }
+            return false;
+        }
+
+
+        $('#search').click(function(){
+            getSearchPoster()
+        });
+        $('#term').keyup(function (event) {
+            if (event.keyCode === 13) {
+                getSearchPoster();
+            }
+        });
+
+                //Window load spinner...
+                $(window).on('load', function () {
+                    //Animate loader off screen
+                    $(".se-pre-con").fadeOut("slow");
+                });
             });
 
-        }
 
-        return false;
+        //Movie search tab
+        // $('#term').focus(function () {
+        //     let full = !!$("#poster").has("img").length;
+        //     if (full === false) $('#poster').empty();
+        // });
+
+
+
     }
 
-
-    $('#search').click(getPoster);
-    $('#term').keyup(function(event){
-        if(event.keyCode == 13){
-            getPoster();
-        }
-    });
-
-}
 
 
 
