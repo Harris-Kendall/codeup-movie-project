@@ -24,13 +24,13 @@
                     for (let movie of movies) {
                         let {title, rating, id} = movie;
                         $('#main').append(`
-                            <div id="${id}" class="card my-2" style="width: 18rem;">
+                            <div id="${title}" class="card my-2" style="width: 18rem;">
                                 <img class="card-img-top" data- src="" alt="movie poster">
-                                <div class="card-body">
+                                <div id="${id}" class="card-body">
                                     <h3>${title}</h3> 
                                     <p>  ${rating} <i class="fas fa-star"></i></p>
                                     <div class="d-flex justify-content-around">
-                                        <button data-movieid="${id}" class="edit btn btn-dark">Edit</button>
+                                        <button data-movieid="${id}" data-movietitle="${title}" data-rating="${rating}" class="edit btn btn-dark">Edit</button>
                                         <button data-movieid="${id}" class="deletion btn btn-dark">Delete</button>
                                     </div>
                                 </div>
@@ -124,11 +124,22 @@
         });// --- End of Add a Movie tab
 
         //----Edit Movie
+        function editCard(movieIdNumber, newTitle, newRating){
+            let editedTitle = newTitle.replace(/\w\S*/g, function(txt)
+            {
+                if (txt.match(/^(e|y|de|lo|los|la|las|do|dos|da|das|del|van|von|bin|le)$/gi)) return txt.toLowerCase();
+                else return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+            });
+            $(`#${movieIdNumber} h3`).replaceWith(`<h3>${editedTitle}</h3>`);
+            $(`#${movieIdNumber} p`).replaceWith(`<p>   ${newRating} <i class="fas fa-star"></i></p>`);
+        }
+
         function editMovie(movieIdNumber, newTitle, newRating){
-            var myHeaders = new Headers();
+            editCard(movieIdNumber, newTitle, newRating);
+            let myHeaders = new Headers();
             myHeaders.append("Content-Type", "application/json");
-            var raw = JSON.stringify({"title": newTitle,"rating": newRating,"id": movieIdNumber});
-            var requestOptions = {
+            let raw = JSON.stringify({"title": newTitle,"rating": newRating,"id": movieIdNumber});
+            const requestOptions = {
                 method: 'PUT',
                 headers: myHeaders,
                 body: raw,
@@ -160,23 +171,23 @@
                    let selectedMovie = e.target.dataset['movieid'];
                    // console.log(selectedMovie);
                    let modal = document.getElementById("myModal");
+                   $("#new-movie-title").attr("placeholder", e.target.dataset['movietitle']);
+                   $("#new-rating").attr("placeholder", e.target.dataset['rating']);
                    modal.style.display = "block";
 
                    let newTitle = '';
                    let newRating;
                    //---- Get newTitle and newRating from Modal window
                    $('#submit').click(function (){
-                       if ($('#new-movie-title').val() == '') {
-                           alert('Movie title cannot be left blank.')
-                       } else newTitle = $('#new-movie-title').val()
+                       newTitle = $('#new-movie-title').val()
                        newRating = $('#new-rating').val()
                        console.log(newTitle, newRating, selectedMovie)
                        modal.style.display = "none"
                        return editMovie(selectedMovie, newTitle, newRating)
                            .then(response => response.json())
                            .then(console.log)
-                           .then ($('#main').empty())
-                           .then (harkenMovies())
+                           //.then ($('#main').empty())
+                           //.then (setTimeout(harkenMovies(),2000))
                            .catch(console.error);
                    })
                })
@@ -191,7 +202,6 @@
            deleteButtons.forEach((deleteButton, key) =>{
                deleteButton.addEventListener("click", (e)=>{
                    let selectedMovie = e.target.dataset['movieid'];
-
                    deleteMovie(selectedMovie)
                        .then(response => response.json())
                        .then(console.log)
