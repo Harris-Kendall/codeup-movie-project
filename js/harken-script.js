@@ -136,7 +136,6 @@
             };
             let targetUrl = harkenDatabase + '/' + movieIdNumber;
             return fetch(targetUrl, requestOptions)
-            // console.log(targetUrl, requestOptions)
         }
 
         //----Delete Movie
@@ -174,16 +173,14 @@
                        console.log(newTitle, newRating, selectedMovie)
                        modal.style.display = "none"
                        return editMovie(selectedMovie, newTitle, newRating)
+                           .then(response => response.json())
+                           .then(console.log)
+                           .then ($('#main').empty())
+                           .then (harkenMovies())
+                           .catch(console.error);
                    })
-
-                   // editMovie(selectedMovie, newTitle, newRating)
-                   //     .then(response => response.text())
-                   //     .then(result => console.log(result))
-                   //     .catch(error => console.log('error', error));
                })
            });
-
-
 
            //---- Close modal window if user clicks "cancel"
            $('#cancel').on("click", (e) => {
