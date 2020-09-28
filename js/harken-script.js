@@ -123,6 +123,22 @@
             }
         });// --- End of Add a Movie tab
 
+        //----Edit Movie
+        function editMovie(movieIdNumber, newTitle, newRating){
+            var myHeaders = new Headers();
+            myHeaders.append("Content-Type", "application/json");
+            var raw = JSON.stringify({"title": newTitle,"rating": newRating,"id": movieIdNumber});
+            var requestOptions = {
+                method: 'PUT',
+                headers: myHeaders,
+                body: raw,
+                redirect: 'follow'
+            };
+            let targetUrl = harkenDatabase + '/' + movieIdNumber;
+            return fetch(targetUrl, requestOptions)
+            // console.log(targetUrl, requestOptions)
+        }
+
         //----Delete Movie
         function deleteMovie(movieIdNumber){
              const requestOptions ={
@@ -141,10 +157,39 @@
 
            // Add listeners to the selected buttons
            editButtons.forEach((editButton, key) =>{
-               editButton.addEventListener("click", () => {
-                   console.log(key);
+               editButton.addEventListener("click", (e) => {
+                   let selectedMovie = e.target.dataset['movieid'];
+                   // console.log(selectedMovie);
+                   let modal = document.getElementById("myModal");
+                   modal.style.display = "block";
+
+                   let newTitle = '';
+                   let newRating;
+                   //---- Get newTitle and newRating from Modal window
+                   $('#submit').click(function (){
+                       if ($('#new-movie-title').val() == '') {
+                           alert('Movie title cannot be left blank.')
+                       } else newTitle = $('#new-movie-title').val()
+                       newRating = $('#new-rating').val()
+                       console.log(newTitle, newRating, selectedMovie)
+                       modal.style.display = "none"
+                       return editMovie(selectedMovie, newTitle, newRating)
+                   })
+
+                   // editMovie(selectedMovie, newTitle, newRating)
+                   //     .then(response => response.text())
+                   //     .then(result => console.log(result))
+                   //     .catch(error => console.log('error', error));
                })
            });
+
+
+
+           //---- Close modal window if user clicks "cancel"
+           $('#cancel').on("click", (e) => {
+               let modal = document.getElementById("myModal");
+               modal.style.display = "none";
+           })
 
            deleteButtons.forEach((deleteButton, key) =>{
                deleteButton.addEventListener("click", (e)=>{
